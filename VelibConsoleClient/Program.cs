@@ -16,7 +16,7 @@ namespace VelibConsoleClient
             {
                 Console.Write("si vous souhaitez la liste des contrats, entrez \"contrat\" \n" +
                 "si vous souhaitez la liste des stations, entrez  \"list\" \n" +
-                "si vous souhaitez la liste des stations, entrez  \"bike\" : \n");
+                "si vous souhaitez connaitre le nombre de vélo disponible à une station, entrez  \"bike\" : \n");
                 var argument = Console.ReadLine();
                 switch (argument)
                 {
@@ -28,7 +28,7 @@ namespace VelibConsoleClient
                         }
                         break;
                     case "list":
-                        Console.WriteLine("veuillez spcifier le contract :");
+                        Console.WriteLine("veuillez spécifier le contract :");
                         var contrat = Console.ReadLine();
                         string[] ListOfStation = client.GetAllStations(contrat);
                         for (int i = 0; i < ListOfStation.Length; i++)
@@ -39,7 +39,7 @@ namespace VelibConsoleClient
                     case "bike":
                         Console.WriteLine("veuillez spcifier le contract :");
                         var contract = Console.ReadLine();
-                        Console.WriteLine("veuillez spcifier la station :");
+                        Console.WriteLine("veuillez spécifier la station :");
                         var station = Console.ReadLine();
                         Console.WriteLine("Nombre de vélos libres : " + client.GetAvailableBike(contract,station) );
                         break;
