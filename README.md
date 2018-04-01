@@ -10,6 +10,7 @@
 * This project contains a basic SOAP service with few features to improve it.
 * Actual features:
 * -the server part use cache in order to decrease the number of API requests. It is used to decrease the time of processing at each client request.
+* -the request's server are asynchronous 
 * -a console app can be used to test the service. 3 different méthode can be used(contrat,list,bike).
 * -a graphical app can be used to test the service aswell and it is way more simple to use than the console one.
 
@@ -22,6 +23,7 @@
 * As the console propose you, type `contrat` to get the list of the cities you can check
 * Then type `list`. The console will ask you to enter the name of a city to have access to the list of stations. pick up one city in the list of contracts
 * Finally you can type `bike`. The console will ask you 2 questions. The name of the contract and the name of the station. For the contract you have the pick the same one as the previous point and for the station you have to pick a name from the list you acquired on the previous point.
+* You can note that you can type `help` to get all the console commands you need.
 
 * If you want to test with the graphic client:
 * Set `VelibGraphicClient` as start up project and run it

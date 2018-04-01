@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace VelibGatewayService
 {
@@ -12,13 +13,13 @@ namespace VelibGatewayService
     public interface IService1
     {
         [OperationContract]
-        string[] GetAllCity();
+        Task<string[]> GetAllCity();
 
         [OperationContract]
-        string[] GetAllStations(string contract);
+        Task<string[]> GetAllStations(string contract);
 
         [OperationContract]
-        int GetAvailableBike(string contract, string station);
+        Task<int> GetAvailableBike(string contract, string station);
 
     }
 

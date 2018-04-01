@@ -8,7 +8,7 @@ using System.ServiceModel;
 using System.Text;
 using Newtonsoft.Json;
 using System.Runtime.Caching;
-
+using System.Threading.Tasks;
 
 namespace VelibGatewayService
 {
@@ -20,7 +20,12 @@ namespace VelibGatewayService
 
         ObjectCache cache = MemoryCache.Default;
 
-        public string[] GetAllCity()
+        public async Task<string[]> GetAllCity()
+        {
+            return (await GetAllCityAsync());
+        }
+
+        public async Task<string[]> GetAllCityAsync()
         {
             //permet de refresh la liste toutes les 10 heures.
             DateTimeOffset time = DateTimeOffset.Now.AddHours(10.0);
@@ -28,18 +33,8 @@ namespace VelibGatewayService
 
             if (!cache.Contains("cities"))
             {
-                WebRequest request = WebRequest.Create("https://api.jcdecaux.com/vls/v1/contracts?&apiKey=d82787273621e9a85d7a277efa5512ac5b542627");
-                WebResponse response = request.GetResponse();
-                // Display the status.
-                //Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-                // Get the stream containing content returned by the server.
-                Stream dataStream = response.GetResponseStream();
-                // Open the stream using a StreamReader for easy access.
-                StreamReader reader = new StreamReader(dataStream);
-                // Read the content.
 
-                string responseFromServer = reader.ReadToEnd();
-
+                string responseFromServer = await GetRestApiResultAsync("https://api.jcdecaux.com/vls/v1/contracts?&apiKey=d82787273621e9a85d7a277efa5512ac5b542627");
 
                 List<Contract> contractList = JsonConvert.DeserializeObject<List<Contract>>(responseFromServer);
                 string[] reponse = new string[contractList.Count];
@@ -54,11 +49,14 @@ namespace VelibGatewayService
             {
                 return (string[])cache.Get("cities");
             }
-            
-
         }
 
-        public string[] GetAllStations(string contract)
+        public async Task<string[]> GetAllStations(string contract)
+        {
+            return (await GetAllStationsAsync(contract));
+        }
+
+        public async Task<string[]> GetAllStationsAsync(string contract)
         {
             //dans le cas où le contrat n'est pas stipulé je met contrat à Toulouse pour éviter tout crash de l'application
             if (contract == "")
@@ -69,17 +67,7 @@ namespace VelibGatewayService
 
             if (!cache.Contains(contract))
             {
-                WebRequest request = WebRequest.Create("https://api.jcdecaux.com/vls/v1/stations?contract=" + contract + "&apiKey=d82787273621e9a85d7a277efa5512ac5b542627");
-                WebResponse response = request.GetResponse();
-                // Display the status.
-                //Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-                // Get the stream containing content returned by the server.
-                Stream dataStream = response.GetResponseStream();
-                // Open the stream using a StreamReader for easy access.
-                StreamReader reader = new StreamReader(dataStream);
-                // Read the content.
-
-                string responseFromServer = reader.ReadToEnd();
+                string responseFromServer = await GetRestApiResultAsync("https://api.jcdecaux.com/vls/v1/stations?contract=" + contract + "&apiKey=d82787273621e9a85d7a277efa5512ac5b542627");
                 //convert the server answer into a List of station
                 List<Station> stationsList = JsonConvert.DeserializeObject<List<Station>>(responseFromServer);
 
@@ -101,7 +89,12 @@ namespace VelibGatewayService
 
         }
 
-        public int GetAvailableBike(string contract, string station)
+        public async Task<int> GetAvailableBike(string contract, string station)
+        {
+            return await Task.Run(() => GetAvailableBikeAsync(contract,station));
+        }
+
+        public async Task<int> GetAvailableBikeAsync(string contract, string station)
         {
 
             //permet de refresh la liste toutes les 5 minutes
@@ -110,17 +103,8 @@ namespace VelibGatewayService
             if (!cache.Contains(station))
             {
 
-                WebRequest request = WebRequest.Create("https://api.jcdecaux.com/vls/v1/stations?contract=" + contract + "&apiKey=d82787273621e9a85d7a277efa5512ac5b542627");
-                WebResponse response = request.GetResponse();
-                // Display the status.
-                //Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-                // Get the stream containing content returned by the server.
-                Stream dataStream = response.GetResponseStream();
-                // Open the stream using a StreamReader for easy access.
-                StreamReader reader = new StreamReader(dataStream);
-                // Read the content.
-
-                string responseFromServer = reader.ReadToEnd();
+                
+                string responseFromServer = await GetRestApiResultAsync("https://api.jcdecaux.com/vls/v1/stations?contract=" + contract + "&apiKey=d82787273621e9a85d7a277efa5512ac5b542627");
                 //convert the server answer into a List of station
                 List<Station> stationsList = JsonConvert.DeserializeObject<List<Station>>(responseFromServer);
 
@@ -140,6 +124,28 @@ namespace VelibGatewayService
                 return (int)cache.Get(station);
             }
 
+        }
+
+        public string GetRestApiResult(string url)
+        {
+            WebRequest request = WebRequest.Create(url);
+            WebResponse response = request.GetResponse();
+            // Display the status.
+            //Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+            // Get the stream containing content returned by the server.
+            Stream dataStream = response.GetResponseStream();
+            // Open the stream using a StreamReader for easy access.
+            StreamReader reader = new StreamReader(dataStream);
+            // Read the content.
+
+            return reader.ReadToEnd();
+        }
+
+        public async Task<string> GetRestApiResultAsync(string url)
+        {
+            var myTask = Task.Factory.StartNew(() => GetRestApiResult(url));
+            var result = await myTask;
+            return result;
         }
     }
 }

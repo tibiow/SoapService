@@ -20,15 +20,11 @@ namespace VelibGraphicClient
         }
 
 
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
-        }
-
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
-            string[] cities = client.GetAllCity(); 
+            string[] cities = await client.GetAllCityAsync(); 
             for (int i = 0; i < cities.Length; i++)
             {
                 listBox1.Items.Add(cities[i]);
@@ -36,10 +32,10 @@ namespace VelibGraphicClient
             
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             listBox2.Items.Clear();
-            string[] stations = client.GetAllStations(listBox1.Text);
+            string[] stations = await client.GetAllStationsAsync(listBox1.Text);
             for (int i = 0; i < stations.Length; i++)
             {
                 listBox2.Items.Add(stations[i]);
@@ -47,14 +43,21 @@ namespace VelibGraphicClient
             //listBox2.Items.Add(listBox1.Text);
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private async void button3_Click(object sender, EventArgs e)
         {
-            label1.Text = client.GetAvailableBike(listBox1.Text,listBox2.Text).ToString();
+            int s = await client.GetAvailableBikeAsync(listBox1.Text, listBox2.Text);
+            label1.Text = s.ToString();
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
 
         }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }
