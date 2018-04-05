@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace VelibGatewayService
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
-    [ServiceContract]
+    [ServiceContract(CallbackContract = typeof(IService1Events))]
     public interface IService1
     {
         [OperationContract]
@@ -20,6 +20,17 @@ namespace VelibGatewayService
 
         [OperationContract]
         Task<int> GetAvailableBike(string contract, string station);
+
+        [OperationContract]
+        void Available(string city,string contrat);
+
+        [OperationContract]
+        void SubscribeToStation();
+
+        [OperationContract]
+        void SubscribeToStationFinishedEvent();
+
+
 
     }
 

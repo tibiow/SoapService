@@ -12,13 +12,17 @@ using System.Threading.Tasks;
 
 namespace VelibGatewayService
 {
-    
+
 
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
     public class Service1 : IService1
     {
 
         ObjectCache cache = MemoryCache.Default;
+        static Action<string, string,int> m_Event1 = delegate { };
+        static Action m_Event2 = delegate { };
+
 
         public async Task<string[]> GetAllCity()
         {
@@ -147,5 +151,28 @@ namespace VelibGatewayService
             var result = await myTask;
             return result;
         }
+
+        public async void Available(string city,string station)
+        {
+            int number = await GetAvailableBike(city, station);
+            m_Event1(city, station, number);
+            m_Event2();
+        }
+
+        public void SubscribeToStation()
+        {
+            IService1Events sub = OperationContext.Current.GetCallbackChannel<IService1Events>();
+            m_Event1 += sub.AvailableBikes;
+        }
+
+        public void SubscribeToStationFinishedEvent()
+        {
+            IService1Events sub = OperationContext.Current.GetCallbackChannel<IService1Events>();
+            m_Event2 += sub.AvailableBikesFinished;
+        }
+
+
     }
+
+    
 }

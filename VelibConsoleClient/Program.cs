@@ -1,6 +1,8 @@
-﻿using System;
+﻿using EventsClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,10 +10,21 @@ namespace VelibConsoleClient
 {
     class Program
     {
-        static VelibService.Service1Client client = new VelibService.Service1Client();
+        static VelibService.Service1Client client;
+
         static void Main(string[] args)
         {
+            VelibServiceCallbackSink objsink = new VelibServiceCallbackSink();
+            InstanceContext icontext = new InstanceContext(objsink);
 
+            client = new VelibService.Service1Client(icontext);
+            client.SubscribeToStation();
+            client.SubscribeToStationFinishedEvent();
+
+            client.Available("Rouen", "05- HOTEL DE VILLE");
+            Console.ReadLine();
+
+            /*
             Console.Write("si vous souhaitez la liste des contrats, entrez \"contrat\" \n" +
                 "si vous souhaitez la liste des stations, entrez  \"list\" \n" +
                 "si vous souhaitez connaitre le nombre de vélo disponible à une station, entrez  \"bike\" \n" +
@@ -20,6 +33,7 @@ namespace VelibConsoleClient
             {
                 CallSOAP();
             }
+            */
         }
 
         static async void CallSOAP()

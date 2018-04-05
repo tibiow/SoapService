@@ -12,7 +12,7 @@ namespace VelibConsoleClient.VelibService {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="VelibService.IService1")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="VelibService.IService1", CallbackContract=typeof(VelibConsoleClient.VelibService.IService1Callback))]
     public interface IService1 {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetAllCity", ReplyAction="http://tempuri.org/IService1/GetAllCityResponse")]
@@ -32,6 +32,34 @@ namespace VelibConsoleClient.VelibService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetAvailableBike", ReplyAction="http://tempuri.org/IService1/GetAvailableBikeResponse")]
         System.Threading.Tasks.Task<int> GetAvailableBikeAsync(string contract, string station);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/Available", ReplyAction="http://tempuri.org/IService1/AvailableResponse")]
+        void Available(string city, string contrat);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/Available", ReplyAction="http://tempuri.org/IService1/AvailableResponse")]
+        System.Threading.Tasks.Task AvailableAsync(string city, string contrat);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SubscribeToStation", ReplyAction="http://tempuri.org/IService1/SubscribeToStationResponse")]
+        void SubscribeToStation();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SubscribeToStation", ReplyAction="http://tempuri.org/IService1/SubscribeToStationResponse")]
+        System.Threading.Tasks.Task SubscribeToStationAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SubscribeToStationFinishedEvent", ReplyAction="http://tempuri.org/IService1/SubscribeToStationFinishedEventResponse")]
+        void SubscribeToStationFinishedEvent();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SubscribeToStationFinishedEvent", ReplyAction="http://tempuri.org/IService1/SubscribeToStationFinishedEventResponse")]
+        System.Threading.Tasks.Task SubscribeToStationFinishedEventAsync();
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IService1Callback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/AvailableBikes")]
+        void AvailableBikes(string city, string station, int number);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/AvailableBikesFinished")]
+        void AvailableBikesFinished();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -40,25 +68,26 @@ namespace VelibConsoleClient.VelibService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class Service1Client : System.ServiceModel.ClientBase<VelibConsoleClient.VelibService.IService1>, VelibConsoleClient.VelibService.IService1 {
+    public partial class Service1Client : System.ServiceModel.DuplexClientBase<VelibConsoleClient.VelibService.IService1>, VelibConsoleClient.VelibService.IService1 {
         
-        public Service1Client() {
+        public Service1Client(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
         }
         
-        public Service1Client(string endpointConfigurationName) : 
-                base(endpointConfigurationName) {
+        public Service1Client(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
         }
         
-        public Service1Client(string endpointConfigurationName, string remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public Service1Client(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public Service1Client(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public Service1Client(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public Service1Client(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(binding, remoteAddress) {
+        public Service1Client(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
         }
         
         public string[] GetAllCity() {
@@ -83,6 +112,30 @@ namespace VelibConsoleClient.VelibService {
         
         public System.Threading.Tasks.Task<int> GetAvailableBikeAsync(string contract, string station) {
             return base.Channel.GetAvailableBikeAsync(contract, station);
+        }
+        
+        public void Available(string city, string contrat) {
+            base.Channel.Available(city, contrat);
+        }
+        
+        public System.Threading.Tasks.Task AvailableAsync(string city, string contrat) {
+            return base.Channel.AvailableAsync(city, contrat);
+        }
+        
+        public void SubscribeToStation() {
+            base.Channel.SubscribeToStation();
+        }
+        
+        public System.Threading.Tasks.Task SubscribeToStationAsync() {
+            return base.Channel.SubscribeToStationAsync();
+        }
+        
+        public void SubscribeToStationFinishedEvent() {
+            base.Channel.SubscribeToStationFinishedEvent();
+        }
+        
+        public System.Threading.Tasks.Task SubscribeToStationFinishedEventAsync() {
+            return base.Channel.SubscribeToStationFinishedEventAsync();
         }
     }
 }
