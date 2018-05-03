@@ -57,7 +57,10 @@
   </xs:element>
   <xs:element name="SubscribeToStation">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element minOccurs="0" name="city" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="station" nillable="true" type="xs:string" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SubscribeToStationResponse">
@@ -65,28 +68,11 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="SubscribeToStationFinishedEvent">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SubscribeToStationFinishedEventResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
   <xs:element name="AvailableBikes">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="city" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="station" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="number" type="xs:int" />
       </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="AvailableBikesFinished">
-    <xs:complexType>
-      <xs:sequence />
     </xs:complexType>
   </xs:element>
 </xs:schema>

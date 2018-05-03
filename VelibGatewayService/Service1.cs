@@ -9,6 +9,7 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Runtime.Caching;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace VelibGatewayService
 {
@@ -20,9 +21,53 @@ namespace VelibGatewayService
     {
 
         ObjectCache cache = MemoryCache.Default;
-        static Action<string, string,int> m_Event1 = delegate { };
-        static Action m_Event2 = delegate { };
+        static Action<int> bikeUpdate = delegate { };
+        private List<StationToUpdate> stations = new List<StationToUpdate>();
 
+        private Timer timer = new Timer();
+
+        public Service1()
+        {
+            timer.Elapsed += RefreshTimerElapsed;
+            timer.Interval = 10000; // 10 seconds
+            timer.Start();
+        }
+
+        private void RefreshTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            
+            foreach (StationToUpdate s in stations)
+            {
+                int BikesAvailaible =  GetBikes(s.City, s.Station);
+                bikeUpdate(BikesAvailaible);
+            }
+            
+        }
+
+        public void SubscribeToStation(string city, string station)
+        {
+            Console.WriteLine("new sub");
+            IService1Events sub = OperationContext.Current.GetCallbackChannel<IService1Events>();
+            stations.Add(new StationToUpdate(city, station));
+            bikeUpdate += sub.AvailableBikes;
+        }
+
+        public int GetBikes(string city, string station)
+        {
+            string responseFromServer = GetRestApiResult("https://api.jcdecaux.com/vls/v1/stations?contract=" + city + "&apiKey=d82787273621e9a85d7a277efa5512ac5b542627");
+            //convert the server answer into a List of station
+            List<Station> stationsList = JsonConvert.DeserializeObject<List<Station>>(responseFromServer);
+
+            foreach (Station s in stationsList)
+            {
+                if (s.Name.Equals(station))
+                {
+                    return s.Available_bikes;
+                }
+            }
+
+            return -1;
+        }
 
         public async Task<string[]> GetAllCity()
         {
@@ -155,20 +200,7 @@ namespace VelibGatewayService
         public async void Available(string city,string station)
         {
             int number = await GetAvailableBike(city, station);
-            m_Event1(city, station, number);
-            m_Event2();
-        }
-
-        public void SubscribeToStation()
-        {
-            IService1Events sub = OperationContext.Current.GetCallbackChannel<IService1Events>();
-            m_Event1 += sub.AvailableBikes;
-        }
-
-        public void SubscribeToStationFinishedEvent()
-        {
-            IService1Events sub = OperationContext.Current.GetCallbackChannel<IService1Events>();
-            m_Event2 += sub.AvailableBikesFinished;
+            bikeUpdate(number);
         }
 
 

@@ -25,10 +25,7 @@ namespace VelibGatewayService
         void Available(string city,string contrat);
 
         [OperationContract]
-        void SubscribeToStation();
-
-        [OperationContract]
-        void SubscribeToStationFinishedEvent();
+        void SubscribeToStation(string city, string station);
 
 
 

@@ -40,26 +40,17 @@ namespace VelibConsoleClient.VelibService {
         System.Threading.Tasks.Task AvailableAsync(string city, string contrat);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SubscribeToStation", ReplyAction="http://tempuri.org/IService1/SubscribeToStationResponse")]
-        void SubscribeToStation();
+        void SubscribeToStation(string city, string station);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SubscribeToStation", ReplyAction="http://tempuri.org/IService1/SubscribeToStationResponse")]
-        System.Threading.Tasks.Task SubscribeToStationAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SubscribeToStationFinishedEvent", ReplyAction="http://tempuri.org/IService1/SubscribeToStationFinishedEventResponse")]
-        void SubscribeToStationFinishedEvent();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/SubscribeToStationFinishedEvent", ReplyAction="http://tempuri.org/IService1/SubscribeToStationFinishedEventResponse")]
-        System.Threading.Tasks.Task SubscribeToStationFinishedEventAsync();
+        System.Threading.Tasks.Task SubscribeToStationAsync(string city, string station);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IService1Callback {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/AvailableBikes")]
-        void AvailableBikes(string city, string station, int number);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService1/AvailableBikesFinished")]
-        void AvailableBikesFinished();
+        void AvailableBikes(int number);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -122,20 +113,12 @@ namespace VelibConsoleClient.VelibService {
             return base.Channel.AvailableAsync(city, contrat);
         }
         
-        public void SubscribeToStation() {
-            base.Channel.SubscribeToStation();
+        public void SubscribeToStation(string city, string station) {
+            base.Channel.SubscribeToStation(city, station);
         }
         
-        public System.Threading.Tasks.Task SubscribeToStationAsync() {
-            return base.Channel.SubscribeToStationAsync();
-        }
-        
-        public void SubscribeToStationFinishedEvent() {
-            base.Channel.SubscribeToStationFinishedEvent();
-        }
-        
-        public System.Threading.Tasks.Task SubscribeToStationFinishedEventAsync() {
-            return base.Channel.SubscribeToStationFinishedEventAsync();
+        public System.Threading.Tasks.Task SubscribeToStationAsync(string city, string station) {
+            return base.Channel.SubscribeToStationAsync(city, station);
         }
     }
 }

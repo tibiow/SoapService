@@ -10,9 +10,6 @@ namespace VelibGatewayService
     interface IService1Events
     {
         [OperationContract(IsOneWay = true)]
-        void AvailableBikes(string city,string station,int number);
-
-        [OperationContract(IsOneWay = true)]
-        void AvailableBikesFinished();
+        void AvailableBikes(int number);
     }
 }

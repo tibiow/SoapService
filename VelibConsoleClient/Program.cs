@@ -18,10 +18,9 @@ namespace VelibConsoleClient
             InstanceContext icontext = new InstanceContext(objsink);
 
             client = new VelibService.Service1Client(icontext);
-            client.SubscribeToStation();
-            client.SubscribeToStationFinishedEvent();
+            client.SubscribeToStation("Rouen", "05- HOTEL DE VILLE");
 
-            client.Available("Rouen", "05- HOTEL DE VILLE");
+
             Console.ReadLine();
 
             /*
