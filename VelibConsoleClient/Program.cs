@@ -14,10 +14,13 @@ namespace VelibConsoleClient
 
         static void Main(string[] args)
         {
-            VelibServiceCallbackSink objsink = new VelibServiceCallbackSink();
+            Console.WriteLine("quel est le nom du client");
+            string name = Console.ReadLine();
+            VelibServiceCallbackSink objsink = new VelibServiceCallbackSink(name);
             InstanceContext icontext = new InstanceContext(objsink);
 
             client = new VelibService.Service1Client(icontext);
+            
             client.SubscribeToStation("Rouen", "05- HOTEL DE VILLE");
 
 
